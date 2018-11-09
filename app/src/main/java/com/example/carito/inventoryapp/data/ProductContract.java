@@ -27,7 +27,7 @@ public class ProductContract {
      * looking at product data. content://com.example.carito.inventoryapp/stock/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "stock".
      */
-    public static final String PATH_PRODUCTS = "productos";
+    public static final String PATH_PRODUCTS = "products";
 
     /**
      * Inner class that defines constant values for the products database table.
