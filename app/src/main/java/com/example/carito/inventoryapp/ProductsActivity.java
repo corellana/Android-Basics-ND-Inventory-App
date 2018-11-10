@@ -38,6 +38,12 @@ public class ProductsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Find the ListView which will be populated with the product data
+        ListView productListView = (ListView) findViewById(R.id.list);
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        productListView.setEmptyView(emptyView);
     }
 
     @Override
@@ -72,7 +78,6 @@ public class ProductsActivity extends AppCompatActivity {
 
         // Find the ListView which will be populated with the product data
         ListView productListView = (ListView) findViewById(R.id.list);
-
 
         // Setup an Adapter to create a list item for each row of product data in the Cursor.
         ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
