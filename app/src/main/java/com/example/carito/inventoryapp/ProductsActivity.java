@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
+import com.example.carito.inventoryapp.data.ProductCursorAdapter;
 import com.example.carito.inventoryapp.data.ProductDbHelper;
 
 /**
@@ -68,56 +70,15 @@ public class ProductsActivity extends AppCompatActivity {
                 null,                   // Selection criteria
                 null);                  // The sort order for the returned rows
 
-        TextView displayView = (TextView) findViewById(R.id.text_view_product);
+        // Find the ListView which will be populated with the product data
+        ListView productListView = (ListView) findViewById(R.id.list);
 
-        try {
-            // Create a header in the Text View that looks like this:
-            //
-            // The products table contains <number of rows in Cursor> products.
-            // _id - name - price - quantity - supplier - supplier phone number
-            //
-            // In the while loop below, iterate through the rows of the cursor and display
-            // the information from each column in this order.
-            displayView.setText("The products table contains " + cursor.getCount() + " products.\n\n");
-            displayView.append(ProductEntry._ID + " - " +
-                    ProductEntry.COLUMN_PRODUCT_NAME + " - " +
-                    ProductEntry.COLUMN_PRODUCT_PRICE + " - " +
-                    ProductEntry.COLUMN_PRODUCT_QUANTITY + " - " +
-                    ProductEntry.COLUMN_PRODUCT_SUPPLIER + " - " +
-                    ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER + "\n");
 
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(ProductEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
-            int supplierPhoneNumberColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
+        // Setup an Adapter to create a list item for each row of product data in the Cursor.
+        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
 
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                String currentPrice = cursor.getString(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplier = cursor.getString(supplierColumnIndex);
-                String currentSupplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currentName + " - " +
-                        currentPrice + " - " +
-                        currentQuantity + " - " +
-                        currentSupplier + " - " +
-                        currentSupplierPhoneNumber));
-            }
-
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
+        // Attach the adapter to the ListView.
+        productListView.setAdapter(adapter);
     }
 
     /**
