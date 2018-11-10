@@ -1,28 +1,32 @@
 package com.example.carito.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
 import com.example.carito.inventoryapp.data.ProductCursorAdapter;
-import com.example.carito.inventoryapp.data.ProductDbHelper;
 
 /**
  * Displays list of products that were entered and stored in the app.
  */
-public class ProductsActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+
+    /** Identifier for the product data loader */
+    private static final int PRODUCT_LOADER = 0;
+    /** Adapter for the ListView */
+    ProductCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,46 +48,14 @@ public class ProductsActivity extends AppCompatActivity {
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         productListView.setEmptyView(emptyView);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the products database.
-     */
-    private void displayDatabaseInfo() {
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                ProductEntry._ID,
-                ProductEntry.COLUMN_PRODUCT_NAME,
-                ProductEntry.COLUMN_PRODUCT_PRICE,
-                ProductEntry.COLUMN_PRODUCT_QUANTITY,
-                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
-                ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER};
-
-        // Perform a query on the provider using the ContentResolver.
-        // Use the {@link PetEntry#CONTENT_URI} to access the pet data.
-        Cursor cursor = getContentResolver().query(
-                ProductEntry.CONTENT_URI,   // The content URI of the words table
-                projection,             // The columns to return for each row
-                null,                   // Selection criteria
-                null,                   // Selection criteria
-                null);                  // The sort order for the returned rows
-
-        // Find the ListView which will be populated with the product data
-        ListView productListView = (ListView) findViewById(R.id.list);
 
         // Setup an Adapter to create a list item for each row of product data in the Cursor.
-        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
+        // There is no product data yet (until the loader finishes) so pass in null for the Cursor.
+        mCursorAdapter = new ProductCursorAdapter(this, null);
+        productListView.setAdapter(mCursorAdapter);
 
-        // Attach the adapter to the ListView.
-        productListView.setAdapter(adapter);
+        // Kick off the loader
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
     /**
@@ -106,7 +78,6 @@ public class ProductsActivity extends AppCompatActivity {
         // Receive the new content URI that will allow us to access Snow Jacket's data in the future.
         Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
         }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,5 +103,34 @@ public class ProductsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // Define a projection that specifies the columns from the table we care about.
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUANTITY,
+                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER};
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                ProductEntry.CONTENT_URI,       // Provider content URI to query
+                projection,                     // Columns to include in the resulting Cursor
+                null,                  // No selection clause
+                null,               // No selection arguments
+                null);                 // Default sort order
+    }
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Update {@link ProductCursorAdapter} with this new cursor containing updated product data
+        mCursorAdapter.swapCursor(data);
+    }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // Callback called when the data needs to be deleted
+        mCursorAdapter.swapCursor(null);
     }
 }
