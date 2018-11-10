@@ -1,7 +1,7 @@
 package com.example.carito.inventoryapp;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -11,26 +11,35 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
-import com.example.carito.inventoryapp.data.ProductDbHelper;
 
 /**
  * Allows user to create a new product or edit an existing one.
  */
 public class EditorActivity extends AppCompatActivity {
 
-    /** EditText field to enter the product's name */
+    /**
+     * EditText field to enter the product's name
+     */
     private EditText mNameEditText;
 
-    /** EditText field to enter the product's price */
+    /**
+     * EditText field to enter the product's price
+     */
     private EditText mPriceEditText;
 
-    /** EditText field to enter the product's quantity */
+    /**
+     * EditText field to enter the product's quantity
+     */
     private EditText mQuantityEditText;
 
-    /** EditText field to enter the product's supplier */
+    /**
+     * EditText field to enter the product's supplier
+     */
     private EditText mSupplierEditText;
 
-    /** EditText field to enter the product's supplier  phone number*/
+    /**
+     * EditText field to enter the product's supplier  phone number
+     */
     private EditText mSupplierPhoneNumberEditText;
 
     @Override
@@ -48,9 +57,8 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Get user input from editor and save new product into data base.
-     *
-     * */
-    private void insertPet(){
+     */
+    private void insertPet() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -62,10 +70,6 @@ public class EditorActivity extends AppCompatActivity {
         // this method will take whatever stream was passed in here and convert it into integer form.
         int quantity = Integer.parseInt(quantityString);
 
-        // Create database helper
-        ProductDbHelper mDbHelper = new ProductDbHelper(this);
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
         // Create a ContentValues object where column names are the keys,
         // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
@@ -75,19 +79,20 @@ public class EditorActivity extends AppCompatActivity {
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberString);
 
-        // Insert a new row for product in the database, returning the ID of that new row.
-        long newRowId = db.insert(ProductEntry.TABLE_NAME, null, values);
+        // Insert a new product into the provider, returning the content URI for the new product.
+        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving product", Toast.LENGTH_SHORT).show();
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_product_failed),
+                    Toast.LENGTH_SHORT).show();
         } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Product saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, getString(R.string.editor_insert_product_successful),
+                    Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +22,6 @@ import com.example.carito.inventoryapp.data.ProductDbHelper;
  */
 public class ProductsActivity extends AppCompatActivity {
 
-    /**
-     * Database helper that will provide us access to the database
-     */
-    private ProductDbHelper mDbHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +36,6 @@ public class ProductsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new ProductDbHelper(this);
     }
 
     @Override
@@ -133,27 +124,22 @@ public class ProductsActivity extends AppCompatActivity {
      * Helper method to insert hardcoded product data into the database. For debugging purposes only.
      */
     private void insertProduct() {
-        // Gets the database in write mode
-        // (IE) Create an object of SQLite database class and we do so by calling this instance of
-        // the productDbHelper and using the method {getWritableDatabase}.
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-        // (1)Create Content values object
+        // Create a ContentValues object where column names are the keys and Snow Jacket's product
+        // attributes are the values.
         ContentValues values = new ContentValues();
-        // (2) Make the content values
-        // Let's use the content values put method to store each of the key value pairs.
-
-        // The key is the column header and the value is whatever the correct value info is for
-        // the product we want to enter.
+        // Make the content values
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Snow Jacket");
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, "$199");
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 23);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, 7);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, "30523234456");
 
-        // (3) Insert the info into database by using the insert method.
-        long newRowId = db.insert(ProductEntry.TABLE_NAME, null, values);
-        Log.v("ProductsActivity", "New row ID" + newRowId);
-    }
+        // Insert a new row for Snow Jacket into the provider using the ContentResolver.
+        // Use the {@link ProductEntry#CONTENT_URI} to indicate that we want to insert
+        // into the products database table.
+        // Receive the new content URI that will allow us to access Snow Jacket's data in the future.
+        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        }
 
 
     @Override

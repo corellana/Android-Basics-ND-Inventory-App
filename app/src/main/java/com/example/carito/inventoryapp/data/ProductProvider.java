@@ -7,14 +7,18 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
+import android.util.Log;
 
+import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
 
 /**
  * {@link ContentProvider} for Inventory app.
  */
 public class ProductProvider extends ContentProvider {
-
+    /**
+     * Tag for the log messages
+     */
+    public static final String LOG_TAG = ProductProvider.class.getSimpleName();
     /**
      * URI matcher code for the content URI for the products table
      */
@@ -48,11 +52,6 @@ public class ProductProvider extends ContentProvider {
         // "content://com.example.carito.inventoryapp/products" (without a number at the end) doesn't match.
         sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCTS + "/#", PRODUCT_ID);
     }
-
-    /**
-     * Tag for the log messages
-     */
-    public static final String LOG_TAG = ProductProvider.class.getSimpleName();
 
     /**
      * Database helper object
@@ -115,7 +114,31 @@ public class ProductProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case PRODUCTS:
+                return insertProduct(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    /**
+     * Insert a product into the database with the given content values. Return the new content URI
+     * for that specific row in the database.
+     */
+    private Uri insertProduct(Uri uri, ContentValues values) {
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        // Insert the new product with the given values
+        long id = database.insert(ProductEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, id);
     }
 
     /**
@@ -142,6 +165,4 @@ public class ProductProvider extends ContentProvider {
     public String getType(Uri uri) {
         return null;
     }
-
-
 }
