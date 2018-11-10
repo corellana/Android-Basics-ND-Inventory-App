@@ -128,6 +128,32 @@ public class ProductProvider extends ContentProvider {
      * for that specific row in the database.
      */
     private Uri insertProduct(Uri uri, ContentValues values) {
+        // Check that the name is not null
+        String name = values.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
+        if (name == null) {
+            throw new IllegalArgumentException("Product requires a name");
+        }
+        // If the quantity is provided, check that it's greater than or equal to 0
+        Integer price = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_PRICE);
+        if (price != null && price < 0) {
+            throw new IllegalArgumentException("Pet requires valid quantity");
+        }
+        // If the quantity is provided, check that it's greater than or equal to 0
+        Integer quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        if (quantity != null && quantity < 0) {
+            throw new IllegalArgumentException("Pet requires valid quantity");
+        }
+        // Check that the supplier is not null
+        String supplier = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
+        if (supplier == null) {
+            throw new IllegalArgumentException("Product requires a supplier");
+        }
+        // Check that the supplier phone number is not null
+        String supplierPhoneNumber = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
+        if (supplierPhoneNumber == null) {
+            throw new IllegalArgumentException("Product requires a supplier phone number");
+        }
+
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
         // Insert the new product with the given values
