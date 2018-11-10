@@ -16,8 +16,6 @@ import android.widget.TextView;
 import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
 import com.example.carito.inventoryapp.data.ProductDbHelper;
 
-
-
 /**
  * Displays list of products that were entered and stored in the app.
  */
@@ -44,12 +42,11 @@ public class ProductsActivity extends AppCompatActivity {
         });
 
 
-    // To access our database, we instantiate our subclass of SQLiteOpenHelper
-    // and pass the context, which is the current activity.
-    mDbHelper = new ProductDbHelper(this);
-}
+        // To access our database, we instantiate our subclass of SQLiteOpenHelper
+        // and pass the context, which is the current activity.
+        mDbHelper = new ProductDbHelper(this);
+    }
 
-    // The list will refresh with the new pet in the database.
     @Override
     protected void onStart() {
         super.onStart();
@@ -61,13 +58,9 @@ public class ProductsActivity extends AppCompatActivity {
      * the products database.
      */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // (1) To start writing the query method you need to first write the projection and any
-        // selection that's needed.
-        // Projection is a string of array with the column names that I'm interested  in.
-        String [] projection = {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductEntry.COLUMN_PRODUCT_PRICE,
@@ -75,24 +68,18 @@ public class ProductsActivity extends AppCompatActivity {
                 ProductEntry.COLUMN_PRODUCT_SUPPLIER,
                 ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER};
 
-        // (2) Pass the projection into the query method.
-        // You need to call the query method with the correct parameters. If you don't need to use
-        // a parameter, you can simply pass in the value null.
-        Cursor cursor = db.query(
-                ProductEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
+        // Perform a query on the provider using the ContentResolver.
+        // Use the {@link PetEntry#CONTENT_URI} to access the pet data.
+        Cursor cursor = getContentResolver().query(
+                ProductEntry.CONTENT_URI,   // The content URI of the words table
+                projection,             // The columns to return for each row
+                null,                   // Selection criteria
+                null,                   // Selection criteria
+                null);                  // The sort order for the returned rows
 
-        TextView displayView = (TextView)findViewById(R.id.text_view_product);
+        TextView displayView = (TextView) findViewById(R.id.text_view_product);
 
         try {
-
-
             // Create a header in the Text View that looks like this:
             //
             // The products table contains <number of rows in Cursor> products.
@@ -126,7 +113,6 @@ public class ProductsActivity extends AppCompatActivity {
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
                 String currentSupplier = cursor.getString(supplierColumnIndex);
                 String currentSupplierPhoneNumber = cursor.getString(supplierPhoneNumberColumnIndex);
-
                 // Display the values from each column of the current row in the cursor in the TextView
                 displayView.append(("\n" + currentID + " - " +
                         currentName + " - " +

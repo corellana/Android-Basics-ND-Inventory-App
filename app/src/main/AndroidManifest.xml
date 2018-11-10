@@ -27,5 +27,9 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".ProductsActivity" />
     </activity>
+        <provider
+            android:name=".data.ProductProvider"
+            android:authorities="com.example.carito.inventoryapp"
+            android:exported="false" />
 </application>
 </manifest>
