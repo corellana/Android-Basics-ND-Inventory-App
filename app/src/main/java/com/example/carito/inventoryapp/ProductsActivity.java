@@ -95,7 +95,6 @@ public class ProductsActivity extends AppCompatActivity implements LoaderManager
             case R.id.action_insert_dummy_data:
                 // I want to modify the code to call an insert product method.
                 insertProduct();
-                displayDatabaseInfo();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
