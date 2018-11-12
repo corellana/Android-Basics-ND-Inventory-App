@@ -86,9 +86,9 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Get user input from editor and save new product into data base.
+     * Get user input from editor and save product into data base.
      */
-    private void insertPet() {
+    private void savetPet() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -109,6 +109,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberString);
 
+        /**
         // Insert a new product into the provider, returning the content URI for the new product.
         Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
@@ -117,10 +118,39 @@ public class EditorActivity extends AppCompatActivity implements
             // If the new content URI is null, then there was an error with insertion.
             Toast.makeText(this, getString(R.string.editor_insert_product_failed),
                     Toast.LENGTH_SHORT).show();
+
+        **/
+        // Determine if this is a new or existing product by checking if mCurrentPetUri is null or not
+        if (mCurrentProductUri == null) {
+            // This is a NEW product, so insert a new product into the provider,
+            // returning the content URI for the new product.
+            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful.
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_product_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_product_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, getString(R.string.editor_insert_product_successful),
-                    Toast.LENGTH_SHORT).show();
+            // Otherwise this is an EXISTING product, so update the product with content URI: mCurrentProductUri
+            // and pass in the new ContentValues. Pass in null for the selection and selection args
+            // because mCurrentProductUri will already identify the correct row in the database that
+            // we want to modify.
+            int rowsAffected = getContentResolver().update(mCurrentProductUri, values, null, null);
+            // Show a toast message depending on whether or not the update was successful.
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_update_product_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_update_product_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -138,7 +168,7 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                insertPet();
+                savetPet();
                 // Exit the activity
                 finish();
                 return true;
