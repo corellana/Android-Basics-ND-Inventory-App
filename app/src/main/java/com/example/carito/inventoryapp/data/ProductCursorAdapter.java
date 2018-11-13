@@ -1,4 +1,5 @@
 package com.example.carito.inventoryapp.data;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.carito.inventoryapp.R;
 import com.example.carito.inventoryapp.data.ProductContract.ProductEntry;
+
 /**
  * {@link ProductCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of product data as its data source. This adapter knows
@@ -80,9 +82,9 @@ public class ProductCursorAdapter extends CursorAdapter {
         quantityTextView.setText(productQuantity);
 
         decreaseQuantityButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick (View v){
+            public void onClick(View v) {
 
             }
         });
     }
-    }
+}

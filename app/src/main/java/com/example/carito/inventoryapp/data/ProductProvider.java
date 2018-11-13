@@ -184,14 +184,14 @@ public class ProductProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case PRODUCTS:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateProduct(uri, contentValues, selection, selectionArgs);
             case PRODUCT_ID:
                 // For the PRODUCT_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = ProductEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateProduct(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
@@ -201,7 +201,7 @@ public class ProductProvider extends ContentProvider {
      * specified in the selection and selection arguments (which could be 0 or 1 or more products).
      * Return the number of rows that were successfully updated.
      */
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // If the {@link ProductEntry#COLUMN_PRODUCT_NAME} key is present,
         // check that the name value is not null.
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
