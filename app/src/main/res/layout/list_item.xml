@@ -36,7 +36,8 @@
             android:id="@+id/btn_decrease_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="-"/>
+            android:hint="-"
+            android:focusable="false"/>
 
     </LinearLayout>
 
