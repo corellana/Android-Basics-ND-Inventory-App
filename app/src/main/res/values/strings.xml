@@ -35,6 +35,15 @@
     <!-- Toast message in editor when current product has failed to be updated [CHAR LIMIT=NONE] -->
     <string name="editor_update_product_failed">Error with updating product</string>
 
+    <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+
+    <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
+    <string name="discard">Discard</string>
+
+    <!-- Dialog button text for the option to keep editing the current product [CHAR LIMIT=20] -->
+    <string name="keep_editing">Keep Editing</string>
+
     <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
     <string name="category_overview">Overview</string>
 
