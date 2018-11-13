@@ -59,8 +59,6 @@
                 android:hint="+"
                 android:onClick="increaseQuantity"/>
 
-
-
             <!-- Supplier field -->
             <EditText
                 android:id="@+id/edit_product_supplier"
@@ -74,6 +72,11 @@
                 android:hint="@string/hint_product_supplier_phone_number"
                 android:inputType="number"
                 style="@style/EditorFieldStyle" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Contact Supplier"
+                android:onClick="contactSupplier"/>
         </LinearLayout>
         </LinearLayout>
 </LinearLayout>
