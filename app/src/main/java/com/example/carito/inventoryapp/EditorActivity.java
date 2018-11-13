@@ -120,7 +120,7 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get user input from editor and save product into data base.
      */
-    private void savetPet() {
+    private void saveProduct() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -144,8 +144,12 @@ public class EditorActivity extends AppCompatActivity implements
         // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+        if (TextUtils.isEmpty(nameString)){
+            mNameEditText.setError("Product Name can't be empty");
+            return;
+        }
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-        // If the quantity is not provided by the user, don't try to parse the string into an
+        // If the price is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int price = 0;
         if (!TextUtils.isEmpty(priceString)) {
@@ -193,6 +197,8 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        // Exit the activity
+        finish();
     }
 
     @Override
@@ -224,9 +230,7 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                savetPet();
-                // Exit the activity
-                finish();
+                saveProduct();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
