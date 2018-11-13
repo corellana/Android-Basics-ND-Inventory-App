@@ -39,7 +39,7 @@
             <EditText
                 android:id="@+id/edit_product_price"
                 android:hint="@string/hint_product_price"
-                android:inputType="textCapWords"
+                android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
             <!-- Quantity field -->

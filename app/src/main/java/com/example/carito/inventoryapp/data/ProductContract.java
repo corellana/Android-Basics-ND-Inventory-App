@@ -69,7 +69,7 @@ public class ProductContract {
         /**
          * Price of the product.
          *
-         * Type: TEXT
+         * Type: INT
          */
         public static final String COLUMN_PRODUCT_PRICE = "Price";
 
