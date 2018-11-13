@@ -79,4 +79,6 @@
     <!-- Text hint for supplier phone number field in the editor [CHAR LIMIT=30] -->
     <string name="hint_product_supplier_phone_number">Supplier Phone Number</string>
 
+    <!-- Label for the price's product if the product is unknown [CHAR LIMIT=20] -->
+    <string name="unknown_price">Unknown price</string>
 </resources>

@@ -235,12 +235,6 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-
-                /**
-                // Navigate back to parent activity (ProductsActivity)
-                NavUtils.navigateUpFromSameTask(this);
-                 **/
-
                 // If the product hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
                 if (!mProductHasChanged) {

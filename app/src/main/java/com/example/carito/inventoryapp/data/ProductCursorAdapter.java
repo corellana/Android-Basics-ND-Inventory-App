@@ -1,6 +1,7 @@
 package com.example.carito.inventoryapp.data;
 import android.content.Context;
 import android.database.Cursor;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,13 @@ public class ProductCursorAdapter extends CursorAdapter {
         String productName = cursor.getString(nameColumnIndex);
         String productPrice = cursor.getString(priceColumnIndex);
         String productQuantity = cursor.getString(quantityColumnIndex);
+
+        // If the price is empty or null, then use some default text
+        // that says "Unknown price", so the TextView isn't blank.
+        if (TextUtils.isEmpty(productPrice)) {
+            productPrice = context.getString(R.string.unknown_price);
+        }
+
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
         priceTextView.setText(productPrice);
