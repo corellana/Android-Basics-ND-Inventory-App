@@ -1,7 +1,10 @@
 package com.example.carito.inventoryapp.data;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,16 +58,17 @@ public class ProductCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
         TextView quantityTextView = (TextView) view.findViewById(R.id.quantity);
         Button decreaseQuantityButton = (Button) view.findViewById(R.id.btn_decrease_quantity);
         // Find the columns of product attributes that we're interested in
+        final int idColumnIndex = cursor.getColumnIndex(ProductEntry._ID);
         int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        final int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
         // Read the product attributes from the Cursor for the current product
         String productName = cursor.getString(nameColumnIndex);
         String productPrice = cursor.getString(priceColumnIndex);
@@ -81,9 +85,20 @@ public class ProductCursorAdapter extends CursorAdapter {
         priceTextView.setText(productPrice);
         quantityTextView.setText(productQuantity);
 
+        // Decrease product quantity
         decreaseQuantityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                // Decrease quantity
+                ContentValues values = new ContentValues();
+                int quantity = cursor.getInt(quantityColumnIndex);
+                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity - 1);
 
+                // Generate ProductUri
+                long id = cursor.getLong(idColumnIndex);
+                Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI,id);
+
+                // Update database
+                context.getContentResolver().update(currentProductUri, values, null, null);
             }
         });
     }

@@ -222,7 +222,7 @@ public class ProductProvider extends ContentProvider {
         // If the {@link ProductEntry#COLUMN_PRODUCT_QUANTITY} key is present,
         // check that the quantity value is valid.
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)) {
-            // Check that the weight is greater than or equal to 0 kg
+            // Check that the quantity is greater than or equal to 0
             Integer quantity = values.getAsInteger(ProductEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Product requires valid quantity");
