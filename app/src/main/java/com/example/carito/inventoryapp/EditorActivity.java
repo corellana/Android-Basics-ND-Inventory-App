@@ -425,4 +425,20 @@ public class EditorActivity extends AppCompatActivity implements
         // Close the activity
         finish();
     }
+
+    public void decreaseQuantity(View view) {
+        // Decrease quantity by 1
+        int quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
+        quantity = quantity - 1;
+        mQuantityEditText.setText(String.format("%d", quantity));
+    }
+    public void increaseQuantity(View view) {
+        // Increase quantity by 1
+        int quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
+        quantity = quantity + 1;
+        mQuantityEditText.setText(String.format("%d", quantity));
+    }
+
+
+
 }
