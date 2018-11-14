@@ -125,19 +125,38 @@ public class EditorActivity extends AppCompatActivity implements
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(nameString)){
+            Toast.makeText(this, "Name can't be empty", Toast.LENGTH_LONG).show();
+            return false;
+        }
         String priceString = mPriceEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(priceString)){
+            Toast.makeText(this, "Price can't be empty", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        int price = Integer.parseInt(priceString);
+        if (price <0){
+            Toast.makeText(this, "Price value can't be less than 0", Toast.LENGTH_LONG).show();
+            return false;
+        }
         String quantityString = mQuantityEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(quantityString)){
+            Toast.makeText(this, "Quantity can't be empty", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        int quantity = Integer.parseInt(quantityString);
+        if (quantity <0) {
+            Toast.makeText(this, "Quantity value can't be less than 0", Toast.LENGTH_LONG).show();
+            return false;
+        }
         String supplierString = mSupplierEditText.getText().toString().trim();
+        if (TextUtils.isEmpty(supplierString)){
+            Toast.makeText(this, "Supplier can't be empty", Toast.LENGTH_LONG).show();
+            return false;
+        }
         String supplierPhoneNumberString = mSupplierPhoneNumberEditText.getText().toString().trim();
-
-        // Check if this is supposed to be a new product
-        // and check if all the fields in the editor are blank
-        if (mCurrentProductUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
-                TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierString) &&
-                TextUtils.isEmpty(supplierPhoneNumberString)) {
-            // Since no fields were modified, we can return early without creating a new product.
-            // No need to create ContentValues and no need to do any ContentProvider operations.
+        if (TextUtils.isEmpty(supplierPhoneNumberString)){
+            Toast.makeText(this, "Supplier Phone Number can't be empty", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -145,24 +164,8 @@ public class EditorActivity extends AppCompatActivity implements
         // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-        if (TextUtils.isEmpty(nameString)){
-            mNameEditText.setError("Product Name can't be empty");
-            return false;
-        }
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
-        // If the price is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        int price = 0;
-        if (!TextUtils.isEmpty(priceString)) {
-            price = Integer.parseInt(priceString);
-        }
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
-        // If the quantity is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        int quantity = 0;
-        if (!TextUtils.isEmpty(quantityString)) {
-            quantity = Integer.parseInt(quantityString);
-        }
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, supplierPhoneNumberString);
 
@@ -430,18 +433,28 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     public void decreaseQuantity(View view) {
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)){
+            quantity = Integer.parseInt(quantityString);
+        }
         // Decrease quantity by 1
-        int quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
         quantity = quantity - 1;
+        if (quantity < 0){
+            return;
+        }
         mQuantityEditText.setText(String.format("%d", quantity));
     }
     public void increaseQuantity(View view) {
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)){
+            quantity = Integer.parseInt(quantityString);
+        }
         // Increase quantity by 1
-        int quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
         quantity = quantity + 1;
         mQuantityEditText.setText(String.format("%d", quantity));
     }
-
 
     public void contactSupplier(View view) {
         String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
