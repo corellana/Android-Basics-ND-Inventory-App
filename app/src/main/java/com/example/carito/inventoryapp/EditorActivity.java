@@ -121,7 +121,7 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get user input from editor and save product into data base.
      */
-    private void saveProduct() {
+    private boolean saveProduct() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -138,7 +138,7 @@ public class EditorActivity extends AppCompatActivity implements
                 TextUtils.isEmpty(supplierPhoneNumberString)) {
             // Since no fields were modified, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+            return false;
         }
 
         // Create a ContentValues object where column names are the keys,
@@ -147,7 +147,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         if (TextUtils.isEmpty(nameString)){
             mNameEditText.setError("Product Name can't be empty");
-            return;
+            return false;
         }
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, priceString);
         // If the price is not provided by the user, don't try to parse the string into an
@@ -199,7 +199,7 @@ public class EditorActivity extends AppCompatActivity implements
             }
         }
         // Exit the activity
-        finish();
+        return true;
     }
 
     @Override
@@ -231,7 +231,9 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                saveProduct();
+                if (saveProduct()){
+                    finish();
+                }
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
