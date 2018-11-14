@@ -58,7 +58,7 @@ public class ProductCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, final Context context, final Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView priceTextView = (TextView) view.findViewById(R.id.price);
@@ -85,16 +85,22 @@ public class ProductCursorAdapter extends CursorAdapter {
         priceTextView.setText(productPrice);
         quantityTextView.setText(productQuantity);
 
+        final long id = cursor.getLong(idColumnIndex);
+        final int quantity = cursor.getInt(quantityColumnIndex);
+
         // Decrease product quantity
         decreaseQuantityButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Decrease quantity
                 ContentValues values = new ContentValues();
-                int quantity = cursor.getInt(quantityColumnIndex);
-                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity - 1);
+                int newQuantity = quantity - 1;
+                if (newQuantity < 0){
+                    return;
+                }
+                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, newQuantity);
 
                 // Generate ProductUri
-                long id = cursor.getLong(idColumnIndex);
+
                 Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI,id);
 
                 // Update database
