@@ -126,37 +126,37 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         if (TextUtils.isEmpty(nameString)){
-            Toast.makeText(this, "Name can't be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_empty_name), Toast.LENGTH_LONG).show();
             return false;
         }
         String priceString = mPriceEditText.getText().toString().trim();
         if (TextUtils.isEmpty(priceString)){
-            Toast.makeText(this, "Price can't be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_empty_price), Toast.LENGTH_LONG).show();
             return false;
         }
         int price = Integer.parseInt(priceString);
         if (price <0){
-            Toast.makeText(this, "Price value can't be less than 0", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_price_less_than_zero), Toast.LENGTH_LONG).show();
             return false;
         }
         String quantityString = mQuantityEditText.getText().toString().trim();
         if (TextUtils.isEmpty(quantityString)){
-            Toast.makeText(this, "Quantity can't be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_empty_quantity), Toast.LENGTH_LONG).show();
             return false;
         }
         int quantity = Integer.parseInt(quantityString);
         if (quantity <0) {
-            Toast.makeText(this, "Quantity value can't be less than 0", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_quantity_less_than_zero), Toast.LENGTH_LONG).show();
             return false;
         }
         String supplierString = mSupplierEditText.getText().toString().trim();
         if (TextUtils.isEmpty(supplierString)){
-            Toast.makeText(this, "Supplier can't be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_empty_supplier), Toast.LENGTH_LONG).show();
             return false;
         }
         String supplierPhoneNumberString = mSupplierPhoneNumberEditText.getText().toString().trim();
         if (TextUtils.isEmpty(supplierPhoneNumberString)){
-            Toast.makeText(this, "Supplier Phone Number can't be empty", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.editor_empty_supplier_phone_number), Toast.LENGTH_LONG).show();
             return false;
         }
 

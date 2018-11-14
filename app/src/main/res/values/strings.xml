@@ -65,13 +65,13 @@
     <string name="category_overview">Overview</string>
 
     <!-- Text hint for name field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_product_name">Name (Required)</string>
+    <string name="hint_product_name">Name</string>
 
     <!-- Text hint for price field in the editor [CHAR LIMIT=30] -->
     <string name="hint_product_price">Price</string>
 
     <!-- Text hint for quantity field in the editor [CHAR LIMIT=30] -->
-    <string name="hint_product_quantity">Quantity (Required)</string>
+    <string name="hint_product_quantity">Quantity</string>
 
     <!-- Text hint for supplier field in the editor [CHAR LIMIT=30] -->
     <string name="hint_product_supplier">Supplier</string>
@@ -81,4 +81,28 @@
 
     <!-- Label for the price's product if the product is unknown [CHAR LIMIT=20] -->
     <string name="unknown_price">Unknown price</string>
+
+    <!-- Toast message in editor when name is empty [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_empty_name">Name can\'t be empty</string>
+
+    <!-- Toast message in editor when price is empty [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_empty_price">Price can\'t be empty</string>
+
+    <!-- Toast message in editor when quantity is empty [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_empty_quantity">Quantity can\'t be empty</string>
+
+    <!-- Toast message in editor when supplier is empty [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_empty_supplier">Supplier can\'t be empty</string>
+
+    <!-- Toast message in editor when supplier phone number is empty [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_empty_supplier_phone_number">Supplier phone number can\'t be empty</string>
+
+    <!-- Toast message in editor when price is less than 0 [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_price_less_than_zero">Price value can\'t be less than 0</string>
+
+    <!-- Toast message in editor when quantity is less than 0 [CHAR LIMIT=NONE] [CHAR LIMIT=20] -->
+    <string name="editor_quantity_less_than_zero">Quantity value can\'t be less than 0</string>
+
+
+
 </resources>
